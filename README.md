@@ -5,13 +5,16 @@ A TypeScript-based tool for generating pixel art sprite sheets with different an
 ## Features
 
 - Generate pixel art character sprites
-- Multiple animation states:
-  - Idle (breathing animation)
-  - Walk (moving legs and arms)
-  - Attack (arm swinging animation)
-- Real-time preview in browser
-- Download sprite sheets as PNG
-- Configurable sprite dimensions and animation frames
+- Multiple animation states with advanced animations:
+  - Idle with smooth breathing animation
+  - Walk with physics-based leg and arm movement
+  - Attack with dynamic weapon swing
+- Interactive sprite editing: - Draw tool with color picker - Erase tool - Grid overlay for precise editing
+- Real-time animation preview
+- Project management: - Save projects as JSON - Load and continue editing - Export as PNG (individual frames or sprite sheets)
+- Configurable sprite properties: - Dimensions and scale - Animation parameters - Custom colors for different parts
+- Frame-by-frame navigation
+- Animation playback controls
 
 ## Setup
 
@@ -60,13 +63,55 @@ You can modify the sprite generation settings in `src/index.ts`:
 const config: SpriteConfig = {
   width: 32,
   height: 32,
+  scale: 10,
   animations: [
-    { state: AnimationState.IDLE, frames: 4, duration: 500 },
-    { state: AnimationState.WALK, frames: 6, duration: 100 },
-    { state: AnimationState.ATTACK, frames: 4, duration: 100 },
+    {
+      state: AnimationState.IDLE,
+      frames: 8,
+      frameDelay: 150,
+      config: {
+        breathingIntensity: 1.2,
+        colors: {
+          body: "#000000",
+          outline: "#444444",
+        },
+      },
+    },
+    {
+      state: AnimationState.WALK,
+      frames: 12,
+      frameDelay: 80,
+      config: {
+        walkingSpeed: 2.5,
+        colors: {
+          body: "#000000",
+          outline: "#444444",
+        },
+      },
+    },
+    {
+      state: AnimationState.ATTACK,
+      frames: 10,
+      frameDelay: 60,
+      config: {
+        attackRange: Math.PI * 1.5,
+        colors: {
+          body: "#000000",
+          outline: "#444444",
+          weapon: "#666666",
+        },
+      },
+    },
   ],
 };
 ```
+
+Each animation state can be configured with:
+
+- Number of frames
+- Frame delay (animation speed)
+- State-specific parameters (breathing intensity, walking speed, attack range)
+- Custom colors for different parts (body, outline, weapon)
 
 ## Development
 
@@ -78,14 +123,46 @@ const config: SpriteConfig = {
 ```
 sprite-generator/
 ├── src/
-│   ├── index.ts          # Main application entry
-│   ├── index.html        # HTML template
-│   ├── types.ts          # TypeScript interfaces and types
-│   └── SpriteGenerator.ts # Sprite generation logic
-├── webpack.config.js     # Webpack configuration
-├── tsconfig.json         # TypeScript configuration
-└── package.json         # Project dependencies and scripts
+│   ├── index.ts                    # Main application entry
+│   ├── index.html                  # HTML template
+│   ├── types.ts                    # TypeScript interfaces and types
+│   ├── SpriteGenerator.ts          # Main sprite generation coordinator
+│   ├── generators/                 # Sprite generation components
+│   │   ├── AnimationFrameGenerator.ts  # Animation frame transformations
+│   │   ├── BaseFrameGenerator.ts       # Base character frame generation
+│   │   ├── EasingUtils.ts              # Animation easing functions
+│   │   ├── FrameRenderer.ts            # Canvas rendering operations
+│   │   └── PixelManipulator.ts         # Pixel-level operations
+│   └── managers/                   # Application managers
+│       ├── AnimationManager.ts     # Animation state and playback
+│       ├── CanvasManager.ts        # Canvas operations
+│       ├── FileManager.ts          # File operations
+│       └── UIManager.ts            # UI interactions
+├── webpack.config.js              # Webpack configuration
+├── tsconfig.json                  # TypeScript configuration
+└── package.json                   # Project dependencies and scripts
 ```
+
+## Architecture
+
+The project follows a modular architecture with clear separation of concerns:
+
+### Generators
+
+- **BaseFrameGenerator**: Creates initial character frames with proper structure
+- **AnimationFrameGenerator**: Applies animation transformations to base frames
+- **FrameRenderer**: Handles all canvas rendering operations
+- **PixelManipulator**: Manages pixel-level modifications
+- **EasingUtils**: Provides animation easing functions
+
+### Managers
+
+- **AnimationManager**: Controls animation state and playback
+- **CanvasManager**: Manages canvas operations and rendering
+- **FileManager**: Handles file operations (save/load/download)
+- **UIManager**: Coordinates UI interactions and event handling
+
+The main `SpriteGenerator` class acts as a facade, coordinating between these specialized components to provide a cohesive sprite generation system.
 
 ## License
 
