@@ -1,0 +1,38 @@
+{
+  "name": "sprite-generator",
+  "version": "1.0.0",
+  "description": "Pixel sprite sheet generator for game characters",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack serve --mode development",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/astandrik/sprite-generator.git"
+  },
+  "keywords": [
+    "sprite",
+    "pixel-art",
+    "game-development"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/astandrik/sprite-generator/issues"
+  },
+  "homepage": "https://github.com/astandrik/sprite-generator#readme",
+  "devDependencies": {
+    "@types/node": "^20.8.2",
+    "copy-webpack-plugin": "^11.0.0",
+    "html-webpack-plugin": "^5.5.3",
+    "nodemon": "^3.0.1",
+    "ts-loader": "^9.4.4",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}
