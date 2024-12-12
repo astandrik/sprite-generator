@@ -26,6 +26,7 @@ export class UIManager {
     const regenerateBtn = document.getElementById("regenerateBtn");
     const downloadBtn = document.getElementById("downloadBtn");
     const downloadFrameBtn = document.getElementById("downloadFrameBtn");
+    const downloadSeparateBtn = document.getElementById("downloadSeparateBtn");
     const colorPicker = document.getElementById(
       "colorPicker"
     ) as HTMLInputElement;
@@ -66,6 +67,12 @@ export class UIManager {
     if (downloadFrameBtn) {
       downloadFrameBtn.addEventListener("click", () =>
         this.handleDownloadFrame()
+      );
+    }
+
+    if (downloadSeparateBtn) {
+      downloadSeparateBtn.addEventListener("click", () =>
+        this.handleDownloadSeparateAnimations()
       );
     }
 
@@ -243,6 +250,18 @@ export class UIManager {
         this.canvas.width,
         this.canvas.height
       );
+    }
+  }
+
+  private async handleDownloadSeparateAnimations(): Promise<void> {
+    const currentSprite = this.animationManager.getCurrentSprite();
+    if (currentSprite) {
+      try {
+        await this.fileManager.downloadAnimationsSeparately(currentSprite);
+      } catch (error) {
+        console.error("Error exporting animations:", error);
+        alert("Failed to export animations");
+      }
     }
   }
 
