@@ -112,20 +112,20 @@ export class PixelManipulator {
     y: number,
     color: string
   ) {
-    // Primary anti-aliasing positions (diagonal)
+    // Primary anti-aliasing positions (diagonal) - reduced alpha for more elegant edges
     const primaryPositions = [
-      { pos: [x - 1, y - 1], alpha: 0.3 },
-      { pos: [x + 1, y - 1], alpha: 0.3 },
-      { pos: [x - 1, y + 1], alpha: 0.3 },
-      { pos: [x + 1, y + 1], alpha: 0.3 },
+      { pos: [x - 1, y - 1], alpha: 0.15 },
+      { pos: [x + 1, y - 1], alpha: 0.15 },
+      { pos: [x - 1, y + 1], alpha: 0.15 },
+      { pos: [x + 1, y + 1], alpha: 0.15 },
     ];
 
-    // Secondary anti-aliasing positions (adjacent)
+    // Secondary anti-aliasing positions (adjacent) - reduced alpha for thinner lines
     const secondaryPositions = [
-      { pos: [x - 1, y], alpha: 0.4 },
-      { pos: [x + 1, y], alpha: 0.4 },
-      { pos: [x, y - 1], alpha: 0.4 },
-      { pos: [x, y + 1], alpha: 0.4 },
+      { pos: [x - 1, y], alpha: 0.2 },
+      { pos: [x + 1, y], alpha: 0.2 },
+      { pos: [x, y - 1], alpha: 0.2 },
+      { pos: [x, y + 1], alpha: 0.2 },
     ];
 
     // Add all anti-aliasing pixels with varying intensities

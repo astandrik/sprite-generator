@@ -157,6 +157,15 @@
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                     </select>
+                    <select id="colorTheme" class="theme-select">
+                        <option value="Knight">Knight</option>
+                        <option value="Golden">Golden</option>
+                        <option value="Shadow">Shadow</option>
+                        <option value="Ruby">Ruby</option>
+                        <option value="Forest">Forest</option>
+                        <option value="Royal">Royal</option>
+                        <option value="Mystic">Mystic</option>
+                    </select>
                     <button id="generateBtn">Generate New Character</button>
                     <button id="regenerateBtn">Regenerate Current Type</button>
                 </div>
@@ -191,6 +200,23 @@
                 
                 .character-controls select:hover {
                     border-color: #999;
+                }
+
+                .character-controls .theme-select {
+                    background-color: #f8f9fa;
+                    border: 1px solid #ddd;
+                    color: #444;
+                    font-weight: 500;
+                }
+
+                .character-controls .theme-select:hover {
+                    border-color: #666;
+                    background-color: #fff;
+                }
+
+                .character-controls .theme-select option {
+                    padding: 8px;
+                    background-color: white;
                 }
             </style>
         </div>

@@ -44,5 +44,53 @@ export const COLOR_PALETTES: Record<CharacterType, ColorPalette[]> = {
         outline: "#2F3640",
       },
     },
+    {
+      name: "Golden",
+      colors: {
+        primary: "#FFD700",
+        secondary: "#DAA520",
+        outline: "#8B4513",
+      },
+    },
+    {
+      name: "Shadow",
+      colors: {
+        primary: "#2C3E50",
+        secondary: "#34495E",
+        outline: "#1B2631",
+      },
+    },
+    {
+      name: "Ruby",
+      colors: {
+        primary: "#E74C3C",
+        secondary: "#C0392B",
+        outline: "#922B21",
+      },
+    },
+    {
+      name: "Forest",
+      colors: {
+        primary: "#27AE60",
+        secondary: "#229954",
+        outline: "#196F3D",
+      },
+    },
+    {
+      name: "Royal",
+      colors: {
+        primary: "#3498DB",
+        secondary: "#2980B9",
+        outline: "#1B4F72",
+      },
+    },
+    {
+      name: "Mystic",
+      colors: {
+        primary: "#9B59B6",
+        secondary: "#8E44AD",
+        outline: "#633974",
+      },
+    },
   ],
 };

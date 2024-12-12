@@ -32,10 +32,15 @@ export class SpriteGenerator {
     return this._config;
   }
 
-  public generateSprite(type?: CharacterType): CharacterSprite {
-    // Generate character configuration with optional type
-    this.currentCharacterConfig =
-      this.characterGenerator.generateRandomConfig(type);
+  public generateSprite(
+    type?: CharacterType,
+    themeName?: string
+  ): CharacterSprite {
+    // Generate character configuration with optional type and theme
+    this.currentCharacterConfig = this.characterGenerator.generateRandomConfig(
+      type,
+      themeName
+    );
     this.baseFrameGenerator = new BaseFrameGenerator(
       this._config,
       this.currentCharacterConfig

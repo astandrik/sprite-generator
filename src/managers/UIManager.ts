@@ -192,9 +192,13 @@ export class UIManager {
     const typeSelect = document.getElementById(
       "characterType"
     ) as HTMLSelectElement;
+    const themeSelect = document.getElementById(
+      "colorTheme"
+    ) as HTMLSelectElement;
 
     const type = typeSelect?.value as CharacterType;
-    const sprite = this.spriteGenerator.generateSprite(type);
+    const themeName = themeSelect?.value || "Knight";
+    const sprite = this.spriteGenerator.generateSprite(type, themeName);
     this.animationManager.setCurrentSprite(sprite);
     this.updateFrameInfo();
     this.updateStateSelect();
@@ -205,8 +209,14 @@ export class UIManager {
     const currentSprite = this.animationManager.getCurrentSprite();
     if (!currentSprite) return;
 
+    const themeSelect = document.getElementById(
+      "colorTheme"
+    ) as HTMLSelectElement;
+    const themeName = themeSelect?.value || "Knight";
+
     const sprite = this.spriteGenerator.generateSprite(
-      currentSprite.characterConfig.type
+      currentSprite.characterConfig.type,
+      themeName
     );
     this.animationManager.setCurrentSprite(sprite);
     this.updateFrameInfo();

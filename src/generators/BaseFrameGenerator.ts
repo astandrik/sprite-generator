@@ -50,17 +50,17 @@ export class BaseFrameGenerator {
 
     // Apply enhanced character proportions
     const props = this.characterConfig.proportions;
-    const headHeight = Math.round(6 * props.headSize);
-    const bodyWidth = Math.round(5 * props.bodyWidth);
+    const headHeight = Math.round(5 * props.headSize);
+    const bodyWidth = Math.round(4 * props.bodyWidth);
     const armLength = Math.round(8 * props.armLength);
     const legLength = Math.round(10 * props.legLength);
     const torsoLength = Math.round(8 * props.torsoLength);
-    const neckWidth = Math.round(3 * props.neckWidth);
-    const waistWidth = Math.round(4 * props.waistWidth);
-    const hipWidth = Math.round(5 * props.hipWidth);
-    const armWidth = Math.round(3 * props.armWidth);
-    const legWidth = Math.round(3 * props.legWidth);
-    const muscleShade = 0.9 + props.muscleDefinition * 0.2; // More definition = more contrast
+    const neckWidth = Math.round(2 * props.neckWidth);
+    const waistWidth = Math.round(3 * props.waistWidth);
+    const hipWidth = Math.round(4 * props.hipWidth);
+    const armWidth = Math.round(2 * props.armWidth);
+    const legWidth = Math.round(2 * props.legWidth);
+    const muscleShade = 0.95 + props.muscleDefinition * 0.1; // Subtler muscle definition
 
     // Enhanced head with better shape and details
     const headStart = centerY - headHeight;
@@ -127,24 +127,44 @@ export class BaseFrameGenerator {
       }
     }
 
-    // Enhanced torso with muscle definition
+    // Enhanced torso with dynamic tapering
     const torsoStart = centerY - torsoLength / 2;
     const torsoEnd = centerY + torsoLength / 2;
+    const shoulderY = torsoStart + Math.round(torsoLength * 0.2); // Shoulder position
+    const waistY = torsoEnd - Math.round(torsoLength * 0.2); // Waist position
 
     for (let y = torsoStart; y < torsoEnd; y++) {
-      // Calculate dynamic width for hourglass shape
+      let currentWidth;
       const progress = (y - torsoStart) / (torsoEnd - torsoStart);
-      const currentWidth = Math.round(
-        bodyWidth * (1 - progress) + waistWidth * progress
-      );
 
-      // Add muscle definition through shading
+      if (y < shoulderY) {
+        // Upper chest area - gradual widening
+        const shoulderProgress = (y - torsoStart) / (shoulderY - torsoStart);
+        currentWidth = Math.round(
+          bodyWidth + (props.shoulderWidth - bodyWidth) * shoulderProgress
+        );
+      } else if (y > waistY) {
+        // Lower torso - slight widening towards hips
+        const hipProgress = (y - waistY) / (torsoEnd - waistY);
+        currentWidth = Math.round(
+          waistWidth + (hipWidth - waistWidth) * hipProgress
+        );
+      } else {
+        // Middle torso - dramatic taper
+        const midProgress = (y - shoulderY) / (waistY - shoulderY);
+        currentWidth = Math.round(
+          props.shoulderWidth +
+            (waistWidth - props.shoulderWidth) * Math.pow(midProgress, 1.5)
+        );
+      }
+
+      // Subtle muscle definition
       const musclePattern =
-        Math.sin((y - torsoStart) * 0.5) * props.muscleDefinition * 0.1;
+        Math.sin((y - torsoStart) * 0.3) * props.muscleDefinition * 0.03;
 
       for (let x = centerX - currentWidth; x <= centerX + currentWidth; x++) {
         const distFromCenter = Math.abs(x - centerX) / currentWidth;
-        const shade = muscleShade + musclePattern + distFromCenter * 0.1;
+        const shade = muscleShade + musclePattern + distFromCenter * 0.03;
 
         addPixelWithEffects(x, y, "body", {
           antiAlias: true,
@@ -153,101 +173,122 @@ export class BaseFrameGenerator {
       }
     }
 
-    // Enhanced arms with muscle definition
+    // Enhanced arms with elegant curves
     const armOffset = bodyWidth + 1;
     for (let y = centerY - 3; y < centerY - 3 + armLength; y++) {
       const armProgress = (y - (centerY - 3)) / armLength;
-      const currentArmWidth = Math.round(armWidth * (1 - armProgress * 0.3));
+      const currentArmWidth = Math.round(armWidth * (1 - armProgress * 0.35));
 
-      // Left arm
+      // Add subtle curves to arms
+      const armCurve = Math.sin(armProgress * Math.PI) * 1.5;
+
+      // Left arm with inward curve
+      const leftArmX = centerX - armOffset + armCurve * 0.3;
       for (
-        let x = centerX - armOffset - currentArmWidth;
-        x <= centerX - armOffset + currentArmWidth;
+        let x = leftArmX - currentArmWidth;
+        x <= leftArmX + currentArmWidth;
         x++
       ) {
+        const distFromCenter = Math.abs(x - leftArmX) / currentArmWidth;
         const muscleDetail =
-          Math.sin((y - centerY) * 0.8) * props.muscleDefinition * 0.15;
+          Math.sin((y - centerY) * 0.4) * props.muscleDefinition * 0.05;
         addPixelWithEffects(x, y, "body", {
           antiAlias: true,
-          shade: muscleShade + muscleDetail,
+          shade: muscleShade + muscleDetail - distFromCenter * 0.03,
         });
       }
 
-      // Right arm
+      // Right arm with outward curve
+      const rightArmX = centerX + armOffset - armCurve * 0.3;
       for (
-        let x = centerX + armOffset - currentArmWidth;
-        x <= centerX + armOffset + currentArmWidth;
+        let x = rightArmX - currentArmWidth;
+        x <= rightArmX + currentArmWidth;
         x++
       ) {
+        const distFromCenter = Math.abs(x - rightArmX) / currentArmWidth;
         const muscleDetail =
-          Math.sin((y - centerY) * 0.8) * props.muscleDefinition * 0.15;
+          Math.sin((y - centerY) * 0.4) * props.muscleDefinition * 0.05;
         addPixelWithEffects(x, y, "body", {
           antiAlias: true,
-          shade: muscleShade + muscleDetail,
+          shade: muscleShade + muscleDetail - distFromCenter * 0.03,
         });
       }
     }
 
-    // Enhanced legs with muscle definition
+    // Enhanced legs with dynamic curves
     const hipY = torsoEnd;
-    const legSpread = hipWidth / 2;
+    const baseSpread = hipWidth * 0.6;
 
-    // Hip area
-    for (let y = hipY; y < hipY + 3; y++) {
-      for (let x = centerX - hipWidth; x <= centerX + hipWidth; x++) {
+    // Slimmer hip area
+    for (let y = hipY; y < hipY + 2; y++) {
+      const hipTaper = (y - hipY) / 2;
+      const currentHipWidth = hipWidth * (1 - hipTaper * 0.2);
+      for (
+        let x = centerX - currentHipWidth;
+        x <= centerX + currentHipWidth;
+        x++
+      ) {
         addPixelWithEffects(x, y, "body", {
           antiAlias: true,
-          shade: muscleShade * 0.95,
+          shade: muscleShade * 0.97,
         });
       }
     }
 
-    // Legs with varying width and muscle definition
-    for (let y = hipY + 3; y < hipY + 3 + legLength; y++) {
-      const legProgress = (y - (hipY + 3)) / legLength;
-      const currentLegWidth = Math.round(legWidth * (1 - legProgress * 0.2));
+    // Legs with subtle curves and varying width
+    for (let y = hipY + 2; y < hipY + 2 + legLength; y++) {
+      const legProgress = (y - (hipY + 2)) / legLength;
+      const currentLegWidth = Math.round(legWidth * (1 - legProgress * 0.25));
 
-      // Left leg
+      // Calculate leg positions with subtle S-curve
+      const curveOffset = Math.sin(legProgress * Math.PI) * 2;
+      const legSpread = baseSpread + curveOffset;
+
+      // Left leg with inward curve
+      const leftLegX = centerX - legSpread + curveOffset * 0.5;
       for (
-        let x = centerX - legSpread - currentLegWidth;
-        x <= centerX - legSpread + currentLegWidth;
+        let x = leftLegX - currentLegWidth;
+        x <= leftLegX + currentLegWidth;
         x++
       ) {
         const muscleDetail =
-          Math.sin((y - hipY) * 0.5) * props.muscleDefinition * 0.15;
+          Math.sin((y - hipY) * 0.4) * props.muscleDefinition * 0.08;
+        const distFromCenter = Math.abs(x - leftLegX) / currentLegWidth;
         addPixelWithEffects(x, y, "body", {
           antiAlias: true,
-          shade: muscleShade + muscleDetail,
+          shade: muscleShade + muscleDetail - distFromCenter * 0.05,
         });
       }
 
-      // Right leg
+      // Right leg with outward curve
+      const rightLegX = centerX + legSpread - curveOffset * 0.5;
       for (
-        let x = centerX + legSpread - currentLegWidth;
-        x <= centerX + legSpread + currentLegWidth;
+        let x = rightLegX - currentLegWidth;
+        x <= rightLegX + currentLegWidth;
         x++
       ) {
         const muscleDetail =
-          Math.sin((y - hipY) * 0.5) * props.muscleDefinition * 0.15;
+          Math.sin((y - hipY) * 0.4) * props.muscleDefinition * 0.08;
+        const distFromCenter = Math.abs(x - rightLegX) / currentLegWidth;
         addPixelWithEffects(x, y, "body", {
           antiAlias: true,
-          shade: muscleShade + muscleDetail,
+          shade: muscleShade + muscleDetail - distFromCenter * 0.05,
         });
       }
     }
 
     // Enhanced weapon rendering for attack state
     if (state === AnimationState.ATTACK) {
-      const weaponOffset = armOffset + 2;
-      const bladeLength = 8;
-      const bladeWidth = 2;
+      const weaponOffset = armOffset + 1;
+      const bladeLength = 9;
+      const bladeWidth = 1;
 
       // Enhanced blade with gradient and edge highlight
       for (let y = centerY - bladeLength; y < centerY + 1; y++) {
         const bladeProgress = (y - (centerY - bladeLength)) / bladeLength;
         const currentBladeWidth = Math.max(
           1,
-          Math.round(bladeWidth * (1 - bladeProgress * 0.5))
+          Math.round(bladeWidth * (1 - bladeProgress * 0.3))
         );
 
         // Main blade body
