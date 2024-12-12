@@ -4,17 +4,42 @@ A TypeScript-based tool for generating pixel art sprite sheets with different an
 
 ## Features
 
-- Generate pixel art character sprites
-- Multiple animation states with advanced animations:
-  - Idle with smooth breathing animation
-  - Walk with physics-based leg and arm movement
-  - Attack with dynamic weapon swing
+- Advanced Character Generation: - Multiple character types (Warrior, Mage, Rogue)
+  - Random variations in proportions and features
+  - Customizable body types (Slim, Normal, Bulky)
+  - Character-specific weapons and accessories
+    - Unique color palettes for each type
+    - Regenerate variations while keeping type
+- Multiple animation states with advanced animations: - Idle with smooth breathing animation - Walk with physics-based leg and arm movement - Attack with dynamic weapon swing
 - Interactive sprite editing: - Draw tool with color picker - Erase tool - Grid overlay for precise editing
 - Real-time animation preview
-- Project management: - Save projects as JSON - Load and continue editing - Export as PNG (individual frames or sprite sheets)
+- Project management: - Save projects as JSON with character data - Load and continue editing - Export as PNG (individual frames or sprite sheets)
 - Configurable sprite properties: - Dimensions and scale - Animation parameters - Custom colors for different parts
 - Frame-by-frame navigation
 - Animation playback controls
+
+## Character Types
+
+### Warrior
+
+- Bulkier body type
+- Equipped with sword
+- Heavy armor options
+- Wider stance for stability
+
+### Mage
+
+- Slim or normal body type
+- Magical staff with orb
+- Robe and hat options
+- Mystical color schemes
+
+### Rogue
+
+- Slim and agile appearance
+- Dagger weapon
+- Cape and hood options
+- Dark, stealthy color palettes
 
 ## Setup
 
@@ -125,11 +150,14 @@ sprite-generator/
 ├── src/
 │   ├── index.ts                    # Main application entry
 │   ├── index.html                  # HTML template
-│   ├── types.ts                    # TypeScript interfaces and types
+│   ├── types.ts                    # Core TypeScript interfaces
+│   ├── types/                      # Type definitions
+│   │   └── character.ts            # Character-specific types
 │   ├── SpriteGenerator.ts          # Main sprite generation coordinator
 │   ├── generators/                 # Sprite generation components
 │   │   ├── AnimationFrameGenerator.ts  # Animation frame transformations
 │   │   ├── BaseFrameGenerator.ts       # Base character frame generation
+│   │   ├── CharacterGenerator.ts       # Character type generation
 │   │   ├── EasingUtils.ts              # Animation easing functions
 │   │   ├── FrameRenderer.ts            # Canvas rendering operations
 │   │   └── PixelManipulator.ts         # Pixel-level operations
@@ -149,20 +177,21 @@ The project follows a modular architecture with clear separation of concerns:
 
 ### Generators
 
-- **BaseFrameGenerator**: Creates initial character frames with proper structure
-- **AnimationFrameGenerator**: Applies animation transformations to base frames
-- **FrameRenderer**: Handles all canvas rendering operations
-- **PixelManipulator**: Manages pixel-level modifications
-- **EasingUtils**: Provides animation easing functions
+- **CharacterGenerator**: Manages character type generation and customization - Generates random character configurations - Handles character type-specific features - Manages color palettes and variations - Controls body proportions and accessories
+- **BaseFrameGenerator**: Creates initial character frames - Builds character structure based on type - Applies character-specific features (weapons, armor) - Handles proportions and body types
+- **AnimationFrameGenerator**: Applies animation transformations - Character-specific animation behaviors - Physics-based movement calculations - Smooth transitions and easing
+- **FrameRenderer**: Handles all canvas rendering operations - Pixel-perfect rendering - Scale handling - Canvas context management
+- **PixelManipulator**: Manages pixel-level modifications - Precise pixel placement - Color management - Outline generation
+- **EasingUtils**: Provides animation easing functions - Smooth animation curves - Physics-based motion
 
 ### Managers
 
-- **AnimationManager**: Controls animation state and playback
-- **CanvasManager**: Manages canvas operations and rendering
-- **FileManager**: Handles file operations (save/load/download)
-- **UIManager**: Coordinates UI interactions and event handling
+- **AnimationManager**: Controls animation state and playback - Frame sequencing - Animation timing - State transitions
+- **CanvasManager**: Manages canvas operations and rendering - Canvas setup and scaling - Grid overlay - Drawing context
+- **FileManager**: Handles file operations - Project saving with character data - Loading and validation - PNG export
+- **UIManager**: Coordinates UI interactions - Character generation controls - Animation controls - Drawing tools - State management
 
-The main `SpriteGenerator` class acts as a facade, coordinating between these specialized components to provide a cohesive sprite generation system.
+The main `SpriteGenerator` class acts as a facade, coordinating between these specialized components to provide a cohesive character sprite generation system. It manages the interaction between character generation, animation, and rendering components while maintaining a clean separation of concerns.
 
 ## License
 

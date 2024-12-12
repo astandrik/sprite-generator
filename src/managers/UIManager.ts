@@ -3,6 +3,7 @@ import { SpriteGenerator } from "../SpriteGenerator";
 import { CanvasManager } from "./CanvasManager";
 import { AnimationManager } from "./AnimationManager";
 import { FileManager } from "./FileManager";
+import { CharacterType } from "../types/character";
 
 export class UIManager {
   private selectedColor: string = "#000000";
@@ -22,6 +23,7 @@ export class UIManager {
   private bindEvents(): void {
     // Button handlers
     const generateBtn = document.getElementById("generateBtn");
+    const regenerateBtn = document.getElementById("regenerateBtn");
     const downloadBtn = document.getElementById("downloadBtn");
     const downloadFrameBtn = document.getElementById("downloadFrameBtn");
     const colorPicker = document.getElementById(
@@ -49,6 +51,10 @@ export class UIManager {
 
     if (generateBtn) {
       generateBtn.addEventListener("click", () => this.handleGenerate());
+    }
+
+    if (regenerateBtn) {
+      regenerateBtn.addEventListener("click", () => this.handleRegenerate());
     }
 
     if (downloadBtn) {
@@ -176,7 +182,25 @@ export class UIManager {
 
   private handleGenerate(): void {
     this.animationManager.stopAnimation();
-    const sprite = this.spriteGenerator.generateSprite();
+    const typeSelect = document.getElementById(
+      "characterType"
+    ) as HTMLSelectElement;
+
+    const type = typeSelect?.value as CharacterType;
+    const sprite = this.spriteGenerator.generateSprite(type);
+    this.animationManager.setCurrentSprite(sprite);
+    this.updateFrameInfo();
+    this.updateStateSelect();
+  }
+
+  private handleRegenerate(): void {
+    this.animationManager.stopAnimation();
+    const currentSprite = this.animationManager.getCurrentSprite();
+    if (!currentSprite) return;
+
+    const sprite = this.spriteGenerator.generateSprite(
+      currentSprite.characterConfig.type
+    );
     this.animationManager.setCurrentSprite(sprite);
     this.updateFrameInfo();
     this.updateStateSelect();
@@ -229,12 +253,22 @@ export class UIManager {
 
   private updateFrameInfo(): void {
     const frameInfo = document.getElementById("frameInfo");
-    if (frameInfo) {
-      const info = this.animationManager.getFrameInfo();
-      if (info) {
-        frameInfo.textContent = info;
-      }
+    if (!frameInfo) return;
+
+    const currentSprite = this.animationManager.getCurrentSprite();
+    const currentFrame = this.animationManager.getCurrentFrame();
+
+    if (!currentSprite || !currentFrame) {
+      frameInfo.textContent = "No frame selected";
+      return;
     }
+
+    const characterConfig = currentSprite.characterConfig;
+    const animInfo = this.animationManager.getFrameInfo();
+
+    // Display character type and animation info
+    const characterInfo = characterConfig.type;
+    frameInfo.textContent = `${characterInfo} - ${animInfo || ""}`;
   }
 
   private updateStateSelect(): void {

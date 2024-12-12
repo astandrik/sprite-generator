@@ -18,7 +18,7 @@ export class FileManager {
 
     const spriteData = {
       sprite: currentSprite,
-      version: "1.0.0",
+      version: "1.1.0", // Updated version to reflect character config support
       timestamp: new Date().toISOString(),
     };
 

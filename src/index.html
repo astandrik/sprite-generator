@@ -148,13 +148,50 @@
         <h1>Pixel Sprite Generator</h1>
         
         <div class="controls">
-            <div class="button-group">
-                <button id="generateBtn">Generate Sprite Sheet</button>
-                <button id="downloadBtn">Download All Frames</button>
-                <button id="downloadFrameBtn">Download Current Frame</button>
-                <button id="saveBtn">Save Project</button>
-                <button id="loadBtn">Load Project</button>
+            <div class="controls">
+                <div class="character-controls">
+                    <select id="characterType">
+                        <option value="warrior">Warrior</option>
+                    </select>
+                    <select id="characterGender">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                    <button id="generateBtn">Generate New Character</button>
+                    <button id="regenerateBtn">Regenerate Current Type</button>
+                </div>
+                <div class="button-group">
+                    <button id="downloadBtn">Download All Frames</button>
+                    <button id="downloadFrameBtn">Download Current Frame</button>
+                    <button id="saveBtn">Save Project</button>
+                    <button id="loadBtn">Load Project</button>
+                </div>
             </div>
+
+            <style>
+                .character-controls {
+                    display: flex;
+                    gap: 10px;
+                    align-items: center;
+                    margin-bottom: 10px;
+                    background: #f8f8f8;
+                    padding: 10px;
+                    border-radius: 4px;
+                }
+                
+                .character-controls select {
+                    padding: 8px;
+                    border-radius: 4px;
+                    border: 1px solid #ccc;
+                    background: white;
+                    cursor: pointer;
+                    min-width: 120px;
+                }
+                
+                .character-controls select:hover {
+                    border-color: #999;
+                }
+            </style>
         </div>
 
         <div class="tools">

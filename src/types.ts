@@ -7,6 +7,7 @@ export enum AnimationState {
 export interface PixelData {
   x: number;
   y: number;
+  z?: number; // Optional z-coordinate for depth
   color: string;
 }
 
@@ -40,9 +41,12 @@ export interface SpriteConfig {
   animations: AnimationConfig[];
 }
 
+import { CharacterConfig } from "./types/character";
+
 export interface CharacterSprite {
   frames: Frame[];
   width: number;
   height: number;
   config: SpriteConfig;
+  characterConfig: CharacterConfig;
 }

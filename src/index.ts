@@ -15,9 +15,9 @@ class App {
   constructor() {
     // Configure sprite generation with improved animation settings
     const config: SpriteConfig = {
-      width: 32,
-      height: 32,
-      scale: 10,
+      width: 48,
+      height: 48,
+      scale: 8,
       animations: [
         {
           state: AnimationState.IDLE,
